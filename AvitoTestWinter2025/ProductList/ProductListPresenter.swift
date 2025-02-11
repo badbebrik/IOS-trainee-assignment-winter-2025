@@ -16,6 +16,8 @@ final class ProductListPresenter {
     private var hasMoreData: Bool = true
     private var products: [Product] = []
 
+    private var currentFilter: ProductFilter?
+
     init(interactor: ProductListInteractorProtocol, router: ProductListRouterProtocol) {
         self.interactor = interactor
         self.router = router
@@ -24,19 +26,21 @@ final class ProductListPresenter {
 
 extension ProductListPresenter: ProductListPresenterProtocol {
     func viewDidLoad() {
-        resetAndLoadProducts()
+        resetAndLoadProducts(with: nil)
     }
-    func resetAndLoadProducts() {
+
+    func resetAndLoadProducts(with filter: ProductFilter?) {
         currentOffset = 0
         hasMoreData = true
         products = []
+        currentFilter = filter
         loadProducts()
     }
 
     private func loadProducts() {
         guard !isLoading && hasMoreData else { return }
         isLoading = true
-        interactor.fetchProducts(offset: currentOffset, limit: limit)
+        interactor.fetchProducts(offset: currentOffset, limit: limit, filter: currentFilter)
     }
 
     func loadMoreProducts() {
@@ -44,11 +48,12 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     }
 
     func searchProducts(with query: String) {
-
+        let filter = ProductFilter(title: query, price: nil, priceMin: nil, priceMax: nil, categoryId: nil)
+        resetAndLoadProducts(with: filter)
     }
 
     func didSelectProduct(_ product: Product) {
-
+        
     }
 
     func didFetchProducts(_ newProducts: [Product]) {

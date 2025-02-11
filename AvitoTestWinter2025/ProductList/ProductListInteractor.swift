@@ -13,8 +13,8 @@ final class ProductListInteractor: ProductListInteractorProtocol {
         self.networkService = networkService
     }
 
-    func fetchProducts(offset: Int, limit: Int) {
-        networkService.fetchProducts(offset: offset, limit: limit) { [weak self] result in
+    func fetchProducts(offset: Int, limit: Int, filter: ProductFilter?) {
+        networkService.fetchProducts(offset: offset, limit: limit, filter: filter) { [weak self] result in
             switch result {
             case .success(let products):
                 self?.presenter?.didFetchProducts(products)

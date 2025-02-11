@@ -23,7 +23,7 @@ protocol ProductListPresenterProtocol: AnyObject {
 
 // MARK: Interactor protocol
 protocol ProductListInteractorProtocol: AnyObject {
-    func fetchProducts(offset: Int, limit: Int)
+    func fetchProducts(offset: Int, limit: Int, filter: ProductFilter?)
 }
 
 // MARK: Router protocol

@@ -8,12 +8,59 @@
 import Foundation
 
 protocol NetworkServiceProtocol {
-    func fetchProducts(offset: Int, limit: Int, completion: @escaping (Result<[Product], Error>) -> Void)
+    func fetchProducts(
+        offset: Int?,
+        limit: Int?,
+        filter: ProductFilter?,
+        completion: @escaping (Result<[Product], Error>) -> Void
+    )
 }
 
 final class NetworkService: NetworkServiceProtocol {
-    func fetchProducts(offset: Int, limit: Int, completion: @escaping (Result<[Product], Error>) -> Void) {
-        guard let url = URL(string: "https://api.escuelajs.co/api/v1/products?offset=\(offset)&limit=\(limit)") else {
+
+    func fetchProducts(
+        offset: Int? = nil,
+        limit: Int? = nil,
+        filter: ProductFilter? = nil,
+        completion: @escaping (Result<[Product], Error>) -> Void
+    ) {
+        var components = URLComponents()
+        components.scheme = "https"
+        components.host = "api.escuelajs.co"
+        components.path = "/api/v1/products"
+
+        var queryItems = [URLQueryItem]()
+
+        if let offset = offset {
+            queryItems.append(URLQueryItem(name: "offset", value: "\(offset)"))
+        }
+        if let limit = limit {
+            queryItems.append(URLQueryItem(name: "limit", value: "\(limit)"))
+        }
+
+        if let filter = filter {
+            if let title = filter.title, !title.isEmpty {
+                queryItems.append(URLQueryItem(name: "title", value: title))
+            }
+            if let price = filter.price {
+                queryItems.append(URLQueryItem(name: "price", value: "\(price)"))
+            }
+            if let priceMin = filter.priceMin {
+                queryItems.append(URLQueryItem(name: "price_min", value: "\(priceMin)"))
+            }
+            if let priceMax = filter.priceMax {
+                queryItems.append(URLQueryItem(name: "price_max", value: "\(priceMax)"))
+            }
+            if let categoryId = filter.categoryId {
+                queryItems.append(URLQueryItem(name: "categoryId", value: "\(categoryId)"))
+            }
+        }
+
+        if !queryItems.isEmpty {
+            components.queryItems = queryItems
+        }
+
+        guard let url = components.url else {
             completion(.failure(NetworkError.invalidURL))
             return
         }
