@@ -11,16 +11,17 @@ protocol NetworkServiceProtocol {
     func fetchProducts(
         offset: Int?,
         limit: Int?,
+        searchText: String?,
         filter: ProductFilter?,
         completion: @escaping (Result<[Product], Error>) -> Void
     )
 }
 
 final class NetworkService: NetworkServiceProtocol {
-
     func fetchProducts(
         offset: Int? = nil,
         limit: Int? = nil,
+        searchText: String? = nil,
         filter: ProductFilter? = nil,
         completion: @escaping (Result<[Product], Error>) -> Void
     ) {
@@ -38,10 +39,11 @@ final class NetworkService: NetworkServiceProtocol {
             queryItems.append(URLQueryItem(name: "limit", value: "\(limit)"))
         }
 
+        if let text = searchText, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+            queryItems.append(URLQueryItem(name: "title", value: text))
+        }
+
         if let filter = filter {
-            if let title = filter.title, !title.isEmpty {
-                queryItems.append(URLQueryItem(name: "title", value: title))
-            }
             if let price = filter.price {
                 queryItems.append(URLQueryItem(name: "price", value: "\(price)"))
             }

@@ -18,16 +18,18 @@ protocol ProductListPresenterProtocol: AnyObject {
     func didSelectProduct(_ product: Product)
     func didFetchProducts(_ products: [Product])
     func didFailToFetchProducts(with error: Error)
-    func resetAndLoadProducts(with filter: ProductFilter?)
+    func resetAndLoadProducts(searchText: String?, filter: ProductFilter?)
+    func didTapSearch(with searchText: String)
     func loadMoreProducts()
 }
 
 // MARK: Interactor protocol
 protocol ProductListInteractorProtocol: AnyObject {
-    func fetchProducts(offset: Int, limit: Int, filter: ProductFilter?)
+    func fetchProducts(offset: Int, limit: Int, searchText: String?, filter: ProductFilter?)
 }
 
 // MARK: Router protocol
 protocol ProductListRouterProtocol: AnyObject {
     func navigateToProductDetail(with product: Product, from view: ProductListViewProtocol)
+    func navigateToSearchResults(with searchText: String, filter: ProductFilter?, from view: ProductListViewProtocol)
 }

@@ -17,6 +17,7 @@ final class ProductListPresenter {
     private var products: [Product] = []
 
     private var currentFilter: ProductFilter?
+    private var currentSearchText: String?
 
     init(interactor: ProductListInteractorProtocol, router: ProductListRouterProtocol) {
         self.interactor = interactor
@@ -26,13 +27,14 @@ final class ProductListPresenter {
 
 extension ProductListPresenter: ProductListPresenterProtocol {
     func viewDidLoad() {
-        resetAndLoadProducts(with: nil)
+        resetAndLoadProducts(searchText: nil, filter: nil)
     }
 
-    func resetAndLoadProducts(with filter: ProductFilter?) {
+    func resetAndLoadProducts(searchText: String?, filter: ProductFilter?) {
         currentOffset = 0
         hasMoreData = true
         products = []
+        currentSearchText = searchText
         currentFilter = filter
         loadProducts()
     }
@@ -40,7 +42,12 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     private func loadProducts() {
         guard !isLoading && hasMoreData else { return }
         isLoading = true
-        interactor.fetchProducts(offset: currentOffset, limit: limit, filter: currentFilter)
+        interactor.fetchProducts(
+            offset: currentOffset,
+            limit: limit,
+            searchText: currentSearchText,
+            filter: currentFilter
+        )
     }
 
     func loadMoreProducts() {
@@ -48,12 +55,11 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     }
 
     func searchProducts(with query: String) {
-        let filter = ProductFilter(title: query, price: nil, priceMin: nil, priceMax: nil, categoryId: nil)
-        resetAndLoadProducts(with: filter)
+        resetAndLoadProducts(searchText: query, filter: currentFilter)
     }
 
     func didSelectProduct(_ product: Product) {
-        
+
     }
 
     func didFetchProducts(_ newProducts: [Product]) {
@@ -68,5 +74,9 @@ extension ProductListPresenter: ProductListPresenterProtocol {
 
     func didFailToFetchProducts(with error: any Error) {
         isLoading = false
+    }
+
+    func didTapSearch(with searchText: String) {
+        router.navigateToSearchResults(with: searchText, filter: currentFilter, from: view!)
     }
 }
