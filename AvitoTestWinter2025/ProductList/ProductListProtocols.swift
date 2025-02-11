@@ -18,6 +18,7 @@ protocol ProductListPresenterProtocol: AnyObject {
     func didSelectProduct(_ product: Product)
     func didFetchProducts(_ products: [Product])
     func didFailToFetchProducts(with error: Error)
+    func resetAndLoadProducts(with filter: ProductFilter?)
     func loadMoreProducts()
 }
 

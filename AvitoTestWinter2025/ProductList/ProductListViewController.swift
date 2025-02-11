@@ -27,6 +27,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: "ProductCell")
         collectionView.dataSource = self
         collectionView.delegate = self
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтры", style: .plain, target: self, action: #selector(filterButtonTapped))
         presenter?.viewDidLoad()
     }
 
@@ -64,6 +65,10 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     func showEmptyState() {
 
+    }
+
+    @objc private func filterButtonTapped() {
+        presentFilters()
     }
 
 }
@@ -109,5 +114,27 @@ extension ProductListViewController: UIScrollViewDelegate {
         if offsetY > contentHeight - frameHeight - 100 {
             presenter?.loadMoreProducts()
         }
+    }
+}
+
+extension ProductListViewController: ProductFiltersViewControllerDelegate {
+    func presentFilters() {
+        let filtersVC = ProductFiltersViewController()
+        filtersVC.delegate = self
+
+        if let sheet = filtersVC.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+        }
+        present(filtersVC, animated: true)
+    }
+
+    func filtersViewController(_ vc: ProductFiltersViewController, didApplyFilter filter: ProductFilter) {
+        vc.dismiss(animated: true) {
+            self.presenter?.resetAndLoadProducts(with: filter)
+        }
+    }
+
+    func filtersViewControllerDidCancel(_ vc: ProductFiltersViewController) {
+        vc.dismiss(animated: true)
     }
 }
