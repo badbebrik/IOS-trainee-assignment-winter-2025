@@ -16,13 +16,14 @@ protocol ProductListPresenterProtocol: AnyObject {
     func viewDidLoad()
     func searchProducts(with query: String)
     func didSelectProduct(_ product: Product)
+    func didFetchProducts(_ products: [Product])
+    func didFailToFetchProducts(with error: Error)
+    func loadMoreProducts()
 }
 
 // MARK: Interactor protocol
 protocol ProductListInteractorProtocol: AnyObject {
-    func fetchProducts()
-    func didFetchProducts(_ products: [Product])
-    func didFailToFetchProducts(with error: Error)
+    func fetchProducts(offset: Int, limit: Int)
 }
 
 // MARK: Router protocol

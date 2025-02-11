@@ -9,7 +9,8 @@ import UIKit
 
 final class ProductListAssembly {
     static func assemble() -> UIViewController {
-        let interactor = ProductListInteractor()
+        let networkService = NetworkService()
+        let interactor = ProductListInteractor(networkService: networkService)
         let router = ProductListRouter()
         let presenter = ProductListPresenter(interactor: interactor, router: router)
         let viewController = ProductListViewController()

@@ -56,7 +56,10 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     }
 
     func showProducts(_ products: [Product]) {
-
+        self.products = products
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
 
     func showEmptyState() {
@@ -93,5 +96,18 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let product = products[indexPath.row]
         presenter?.didSelectProduct(product)
+    }
+}
+
+// MARK: - UIScrollViewDelegate
+extension ProductListViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        let frameHeight = scrollView.frame.size.height
+
+        if offsetY > contentHeight - frameHeight - 100 {
+            presenter?.loadMoreProducts()
+        }
     }
 }

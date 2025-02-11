@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import Kingfisher
 
-final class ProductCollectionViewCell : UICollectionViewCell {
+final class ProductCollectionViewCell: UICollectionViewCell {
     private let productImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -42,6 +43,13 @@ final class ProductCollectionViewCell : UICollectionViewCell {
         ])
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        productImageView.kf.cancelDownloadTask()
+        productImageView.image = UIImage(systemName: "placeholder-photo")
+        titleLabel.text = nil
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -49,29 +57,17 @@ final class ProductCollectionViewCell : UICollectionViewCell {
     func configure(with product: Product) {
         titleLabel.text = product.title
 
-        if product.images.isEmpty {
+        guard let urlString = product.images.first, let url = URL(string: urlString) else {
             productImageView.image = UIImage(systemName: "placeholder-photo")
             return
         }
 
-        let urlStr = product.images[0]
-
-        guard let url = URL(string: urlStr) else {
-            productImageView.image = UIImage(systemName: "placeholder-photo")
-            return
-        }
-
-        URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-            if let data = data, error == nil {
-                DispatchQueue.main.async {
-                    self?.productImageView.image = UIImage(data: data)
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self?.productImageView.image = UIImage(systemName: "placeholder-photo")
-                }
-            }
-        }.resume()
-
+        productImageView.kf.setImage(
+            with: url,
+            placeholder: UIImage(systemName: "placeholder-photo"),
+            options: [
+                .transition(.fade(0.2))
+            ]
+        )
     }
 }

@@ -7,16 +7,20 @@
 
 final class ProductListInteractor: ProductListInteractorProtocol {
     weak var presenter: ProductListPresenterProtocol?
-    
-    func fetchProducts() {
+    let networkService: NetworkServiceProtocol
 
+    init(networkService: NetworkServiceProtocol) {
+        self.networkService = networkService
     }
-    
-    func didFetchProducts(_ products: [Product]) {
 
-    }
-    
-    func didFailToFetchProducts(with error: any Error) {
-
+    func fetchProducts(offset: Int, limit: Int) {
+        networkService.fetchProducts(offset: offset, limit: limit) { [weak self] result in
+            switch result {
+            case .success(let products):
+                self?.presenter?.didFetchProducts(products)
+            case .failure(let error):
+                self?.presenter?.didFailToFetchProducts(with: error)
+            }
+        }
     }
 }
