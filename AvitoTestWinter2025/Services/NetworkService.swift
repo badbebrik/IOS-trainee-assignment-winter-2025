@@ -66,7 +66,7 @@ final class NetworkService: NetworkServiceProtocol {
             completion(.failure(NetworkError.invalidURL))
             return
         }
-
+        print(url)
         URLSession.shared.dataTask(with: url) { data, _, error in
             if let error = error {
                 completion(.failure(error))

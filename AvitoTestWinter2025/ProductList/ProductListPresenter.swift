@@ -75,8 +75,4 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     func didFailToFetchProducts(with error: any Error) {
         isLoading = false
     }
-
-    func didTapSearch(with searchText: String) {
-        router.navigateToSearchResults(with: searchText, filter: currentFilter, from: view!)
-    }
 }

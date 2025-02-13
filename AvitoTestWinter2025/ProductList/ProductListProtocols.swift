@@ -14,12 +14,10 @@ protocol ProductListViewProtocol: AnyObject {
 // MARK: Presenter protocol
 protocol ProductListPresenterProtocol: AnyObject {
     func viewDidLoad()
-    func searchProducts(with query: String)
     func didSelectProduct(_ product: Product)
     func didFetchProducts(_ products: [Product])
     func didFailToFetchProducts(with error: Error)
     func resetAndLoadProducts(searchText: String?, filter: ProductFilter?)
-    func didTapSearch(with searchText: String)
     func loadMoreProducts()
 }
 
@@ -31,5 +29,4 @@ protocol ProductListInteractorProtocol: AnyObject {
 // MARK: Router protocol
 protocol ProductListRouterProtocol: AnyObject {
     func navigateToProductDetail(with product: Product, from view: ProductListViewProtocol)
-    func navigateToSearchResults(with searchText: String, filter: ProductFilter?, from view: ProductListViewProtocol)
 }
