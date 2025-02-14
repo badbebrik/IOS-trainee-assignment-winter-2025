@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1D2B21A02D5EC68F00CA817A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 1D2B219F2D5EC68F00CA817A /* Kingfisher */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1D2B20BB2D5A9FBB00CA817A /* AvitoTestWinter2025.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvitoTestWinter2025.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D2B21A02D5EC68F00CA817A /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +84,7 @@
 			);
 			name = AvitoTestWinter2025;
 			packageProductDependencies = (
+				1D2B219F2D5EC68F00CA817A /* Kingfisher */,
 			);
 			productName = AvitoTestWinter2025;
 			productReference = 1D2B20BB2D5A9FBB00CA817A /* AvitoTestWinter2025.app */;
@@ -110,6 +116,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				1D2B20D62D5AA51300CA817A /* XCRemoteSwiftPackageReference "SwiftLint" */,
+				1D2B219E2D5EC68F00CA817A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1D2B20BC2D5A9FBB00CA817A /* Products */;
@@ -362,6 +369,14 @@
 				minimumVersion = 0.58.2;
 			};
 		};
+		1D2B219E2D5EC68F00CA817A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.2.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -369,6 +384,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1D2B20D62D5AA51300CA817A /* XCRemoteSwiftPackageReference "SwiftLint" */;
 			productName = "plugin:SwiftLintBuildToolPlugin";
+		};
+		1D2B219F2D5EC68F00CA817A /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1D2B219E2D5EC68F00CA817A /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
