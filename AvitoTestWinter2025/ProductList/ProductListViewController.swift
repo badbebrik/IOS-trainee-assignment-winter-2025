@@ -91,6 +91,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     func showProducts(_ products: [Product]) {
         self.products = products
+        self.products.append(Product.mock())
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
