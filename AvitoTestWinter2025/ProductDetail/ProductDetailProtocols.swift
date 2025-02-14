@@ -7,7 +7,7 @@
 
 // MARK: - View Protocol
 protocol ProductDetailViewProtocol: AnyObject {
-    func show(product: Product)
+    func show(_ product: Product)
 }
 
 // MARK: - Presenter Protocol
