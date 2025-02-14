@@ -11,12 +11,27 @@ final class ProductDetailPresenter: ProductDetailPresenterProtocol {
 
     weak var view: ProductDetailViewProtocol?
     var product: Product
+    var interactor: ProductDetailInteractorProtocol
 
-    init(product: Product) {
+    var router: ProductDetailRouterProtocol
+
+    init(product: Product, router: ProductDetailRouterProtocol, interactor: ProductDetailInteractorProtocol) {
         self.product = product
+        self.router = router
+        self.interactor = interactor
     }
 
     func viewDidLoad() {
         view?.show(product)
+    }
+
+    func shareButtonTapped() {
+        let shareText = """
+                Check out this product:
+                \(product.title)
+                Price: $\(product.price)
+                \(product.description)
+                """
+        router.shareProduct(with: shareText)
     }
 }

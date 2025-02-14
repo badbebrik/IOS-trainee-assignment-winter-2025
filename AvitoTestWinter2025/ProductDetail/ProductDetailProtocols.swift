@@ -16,7 +16,7 @@ protocol ProductDetailPresenterProtocol: AnyObject {
 }
 
 // MARK: - Interactor Protocol
-protocol ProductDetailProtocolsInteractorProtocol: AnyObject {}
+protocol ProductDetailInteractorProtocol: AnyObject {}
 
 // MARK: - Router Protocol
 protocol ProductDetailRouterProtocol: AnyObject {
