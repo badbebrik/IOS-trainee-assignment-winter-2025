@@ -25,12 +25,15 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     private var products: [Product] = []
     private var collectionView: UICollectionView!
+    private var historyTableView: UITableView!
+    private var searchHistory: [String] = []
     var currentFilter: ProductFilter?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureNavigationBar()
+        configureSearchHistoryTableView()
         searchBar.delegate = self
         collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: "ProductCell")
         collectionView.dataSource = self
@@ -68,11 +71,41 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         ])
     }
 
+    private func configureSearchHistoryTableView() {
+        historyTableView = UITableView()
+        historyTableView.register(UITableViewCell.self, forCellReuseIdentifier: "HistoryCell")
+        historyTableView.dataSource = self
+        historyTableView.delegate = self
+        historyTableView.isHidden = true
+        historyTableView.tableFooterView = UIView()
+        view.addSubview(historyTableView)
+        historyTableView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            historyTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            historyTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            historyTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            historyTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
     func showProducts(_ products: [Product]) {
         self.products = products
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
+    }
+
+    private func presentSearchHistory() {
+        searchHistory = SearchHistoryService.shared.history
+        historyTableView.reloadData()
+        historyTableView.isHidden = searchHistory.isEmpty
+        collectionView.isHidden = true
+    }
+
+    private func hideSearchHistory() {
+        historyTableView.isHidden = true
+        collectionView.isHidden = false
     }
 
     func showEmptyState() {
@@ -92,15 +125,48 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
 // MARK: - UISearchBarDelegate
 extension ProductListViewController: UISearchBarDelegate {
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        presentSearchHistory()
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        hideSearchHistory()
+    }
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
             presenter?.resetAndLoadProducts(searchText: "", filter: currentFilter)
         }
+        presentSearchHistory()
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        hideSearchHistory()
         guard let text = searchBar.text else { return }
+        SearchHistoryService.shared.add(query: text)
         presenter?.resetAndLoadProducts(searchText: text, filter: currentFilter)
+        searchBar.resignFirstResponder()
+    }
+}
+
+// MARK: - UITableViewDataSource & UITableViewDelegate
+extension ProductListViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return searchHistory.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryCell", for: indexPath)
+        cell.textLabel?.text = searchHistory[indexPath.row]
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let selectedQuery = searchHistory[indexPath.row]
+        searchBar.text = selectedQuery
+        hideSearchHistory()
+        presenter?.resetAndLoadProducts(searchText: selectedQuery, filter: currentFilter)
         searchBar.resignFirstResponder()
     }
 }
@@ -113,7 +179,7 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell",for: indexPath) as? ProductCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProductCell", for: indexPath) as? ProductCollectionViewCell else {
             return UICollectionViewCell()
         }
         let product = products[indexPath.row]
@@ -148,6 +214,6 @@ extension ProductListViewController: FiltersModuleDelegate {
     }
 
     func filtersModuleDidCancel() {
-    
+
     }
 }
