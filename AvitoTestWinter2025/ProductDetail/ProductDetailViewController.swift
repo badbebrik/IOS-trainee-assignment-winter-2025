@@ -50,11 +50,17 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupUI()
+        configureNavigationBar()
+        configureUI()
         presenter.viewDidLoad()
     }
 
-    private func setupUI() {
+    private func configureNavigationBar() {
+        navigationItem.title = "Product Details"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareTapped))
+    }
+
+    private func configureUI() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -106,6 +112,10 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
         descriptionLabel.text = product.description
         pageControl.numberOfPages = product.images.count
         galleryCollectionView.reloadData()
+    }
+
+    @objc private func shareTapped() {
+        presenter.shareButtonTapped()
     }
 }
 

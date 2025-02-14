@@ -5,6 +5,6 @@
 //  Created by Виктория Серикова on 14.02.2025.
 //
 
-final class ProductDetailInteractor: ProductDetailProtocolsInteractorProtocol {
+final class ProductDetailInteractor: ProductDetailInteractorProtocol {
     
 }

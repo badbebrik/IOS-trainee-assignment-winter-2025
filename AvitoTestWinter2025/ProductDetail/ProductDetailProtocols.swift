@@ -13,6 +13,7 @@ protocol ProductDetailViewProtocol: AnyObject {
 // MARK: - Presenter Protocol
 protocol ProductDetailPresenterProtocol: AnyObject {
     func viewDidLoad()
+    func shareButtonTapped()
 }
 
 // MARK: - Interactor Protocol
