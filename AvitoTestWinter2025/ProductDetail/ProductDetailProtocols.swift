@@ -19,4 +19,7 @@ protocol ProductDetailPresenterProtocol: AnyObject {
 protocol ProductDetailProtocolsInteractorProtocol: AnyObject {}
 
 // MARK: - Router Protocol
-protocol ProductDetailRouterProtocol: AnyObject {}
+protocol ProductDetailRouterProtocol: AnyObject {
+    func navigateToFullScreenGallery(with images: [String], startingAt index: Int)
+    func shareProduct(with text: String)
+}
