@@ -136,6 +136,10 @@ extension ProductDetailViewController: UICollectionViewDataSource, UICollectionV
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        presenter.didSelectImage(at: indexPath.item)
+    }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page = Int(scrollView.contentOffset.x / scrollView.frame.width)
         pageControl.currentPage = page

@@ -14,6 +14,7 @@ protocol ProductDetailViewProtocol: AnyObject {
 protocol ProductDetailPresenterProtocol: AnyObject {
     func viewDidLoad()
     func shareButtonTapped()
+    func didSelectImage(at: Int)
 }
 
 // MARK: - Interactor Protocol

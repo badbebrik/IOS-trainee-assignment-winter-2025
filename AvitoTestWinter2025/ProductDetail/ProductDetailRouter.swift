@@ -12,9 +12,10 @@ final class ProductDetailRouter: ProductDetailRouterProtocol {
     weak var viewController: UIViewController?
 
     func navigateToFullScreenGallery(with images: [String], startingAt index: Int) {
-        
+        let galleryVC = FullScreenGalleryAssembly.assemble(with: images, initialIndex: index)
+        viewController?.present(galleryVC, animated: true, completion: nil)
     }
-    
+
     func shareProduct(with text: String) {
         guard let vc = viewController else { return }
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)

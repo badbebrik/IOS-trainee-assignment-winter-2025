@@ -34,4 +34,8 @@ final class ProductDetailPresenter: ProductDetailPresenterProtocol {
                 """
         router.shareProduct(with: shareText)
     }
+
+    func didSelectImage(at index: Int) {
+        router.navigateToFullScreenGallery(with: product.images, startingAt: index)
+    }
 }
