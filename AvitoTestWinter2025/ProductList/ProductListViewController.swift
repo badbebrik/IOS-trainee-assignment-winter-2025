@@ -23,6 +23,16 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         return button
     }()
 
+    private lazy var cartButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "cart"),
+            style: .plain,
+            target: self,
+            action: #selector(cartButtonTapped)
+        )
+        return button
+    }()
+
     private var products: [Product] = []
     private var collectionView: UICollectionView!
     private var historyTableView: UITableView!
@@ -44,6 +54,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     private func configureNavigationBar() {
         navigationItem.titleView = searchBar
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: filterButton)
+        navigationItem.leftBarButtonItem = cartButton
     }
 
     func configureUI() {
@@ -115,6 +126,15 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     @objc private func filterButtonTapped() {
         let filtersVC = FiltersAssembly.assemble(currentFilter: self.currentFilter, delegate: self)
         present(filtersVC, animated: true, completion: nil)
+    }
+    
+    @objc private func cartButtonTapped() {
+        let cartVC = CartAssembly.assemble()
+        if let nav = navigationController {
+            nav.pushViewController(cartVC, animated: true)
+        } else {
+            present(cartVC, animated: true, completion: nil)
+        }
     }
 
     func updateFilterBadge(count: Int) {

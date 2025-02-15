@@ -19,6 +19,7 @@ protocol CartPresenterProtocol: AnyObject {
     func didRemoveCartItem(_ item: CartItem)
     func didClearCart()
     func moveCartItem(from sourceIndex: Int, to destinationIndex: Int)
+    func didUpdateQuantity(for cartItem: CartItem, quantity: Int)
 }
 
 // MARK: Interactor
@@ -27,6 +28,8 @@ protocol CartInteractorProtocol: AnyObject {
     func removeItem(_ item: CartItem)
     func clearCart()
     func moveItem(from sourceIndex: Int, to destinationIndex: Int)
+    func updateQuantity(for cartItem: CartItem, quantity: Int)
+
 }
 
 // MARK: Router

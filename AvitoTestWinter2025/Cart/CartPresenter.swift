@@ -17,6 +17,7 @@ final class CartPresenter {
 }
 
 extension CartPresenter: CartPresenterProtocol {
+    
     func viewDidLoad() {
         interactor.fetchCartItems()
     }
@@ -49,5 +50,7 @@ extension CartPresenter: CartPresenterProtocol {
         interactor.moveItem(from: sourceIndex, to: destinationIndex)
     }
     
-
+    func didUpdateQuantity(for cartItem: CartItem, quantity: Int) {
+        interactor.updateQuantity(for: cartItem, quantity: quantity)
+    }
 }
