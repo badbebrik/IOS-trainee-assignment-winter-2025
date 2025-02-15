@@ -59,7 +59,7 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     }
 
     func didSelectProduct(_ product: Product) {
-
+        router.navigateToProductDetail(with: product, from: view!)
     }
 
     func didFetchProducts(_ newProducts: [Product]) {
