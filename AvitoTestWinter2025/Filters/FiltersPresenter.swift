@@ -11,11 +11,11 @@ final class FiltersPresenter: FiltersPresenterProtocol {
     weak var view: FiltersViewProtocol?
     var interactor: FiltersInteractorProtocol
     var router: FiltersRouterProtocol?
-    
+
     init(interactor: FiltersInteractorProtocol) {
         self.interactor = interactor
     }
-    
+
     func viewDidLoad() {
         view?.display(filter: interactor.getCurrentFilter())
         interactor.loadCategories { [weak self] result in
@@ -29,12 +29,12 @@ final class FiltersPresenter: FiltersPresenterProtocol {
             }
         }
     }
-    
+
     func applyButtonTapped(with priceMin: String?, priceMax: String?, categoryId: String?) {
         let priceMinValue = Int(priceMin ?? "")
         let priceMaxValue = Int(priceMax ?? "")
         let categoryIdValue = Int(categoryId ?? "")
-        
+
         let newFilter = ProductFilter(
             title: nil,
             price: nil,
@@ -45,14 +45,13 @@ final class FiltersPresenter: FiltersPresenterProtocol {
         interactor.updateFilter(newFilter)
         router?.dismissFilters(with: newFilter)
     }
-    
+
     func resetButtonTapped() {
         interactor.resetFilter()
         router?.dismissFilters(with: interactor.getCurrentFilter())
     }
-    
+
     func cancelButtonTapped() {
         router?.dismissFilters(with: nil)
     }
 }
-

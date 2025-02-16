@@ -13,5 +13,3 @@ struct Product: Codable {
     let category: Category
     let images: [String]
 }
-
-

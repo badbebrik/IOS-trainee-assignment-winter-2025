@@ -8,20 +8,20 @@
 import UIKit
 
 final class ProductDetailRouter: ProductDetailRouterProtocol {
-    
+
     weak var viewController: UIViewController?
-    
+
     func navigateToFullScreenGallery(with images: [String], startingAt index: Int) {
         let galleryVC = FullScreenGalleryAssembly.assemble(with: images, initialIndex: index)
         viewController?.present(galleryVC, animated: true, completion: nil)
     }
-    
+
     func shareProduct(with text: String) {
-        guard let vc = viewController else { return }
+        guard let viewController = viewController else { return }
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        vc.present(activityVC, animated: true)
+        viewController.present(activityVC, animated: true)
     }
-    
+
     func navigateToCart() {
         let cartVC = CartAssembly.assemble()
         if let nav = viewController?.navigationController {
@@ -30,5 +30,5 @@ final class ProductDetailRouter: ProductDetailRouterProtocol {
             viewController?.present(cartVC, animated: true, completion: nil)
         }
     }
-    
+
 }

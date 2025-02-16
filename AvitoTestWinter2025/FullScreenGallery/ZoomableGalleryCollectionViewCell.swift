@@ -5,28 +5,27 @@
 //  Created by Виктория Серикова on 15.02.2025.
 //
 
-
 import UIKit
 import Kingfisher
 
 final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
 
     private let scrollView: UIScrollView = {
-        let sv = UIScrollView()
-        sv.minimumZoomScale = 1.0
-        sv.maximumZoomScale = 3.0
-        sv.showsVerticalScrollIndicator = false
-        sv.showsHorizontalScrollIndicator = false
-        sv.translatesAutoresizingMaskIntoConstraints = false
-        return sv
+        let scrollView = UIScrollView()
+        scrollView.minimumZoomScale = 1.0
+        scrollView.maximumZoomScale = 3.0
+        scrollView.showsVerticalScrollIndicator = false
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
     }()
 
     private let imageView: UIImageView = {
-        let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
-        iv.isUserInteractionEnabled = true
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        return iv
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.isUserInteractionEnabled = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
 
     override init(frame: CGRect) {

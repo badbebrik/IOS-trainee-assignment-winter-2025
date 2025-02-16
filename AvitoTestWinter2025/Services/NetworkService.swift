@@ -30,20 +30,20 @@ final class NetworkService: NetworkServiceProtocol {
         components.scheme = "https"
         components.host = "api.escuelajs.co"
         components.path = "/api/v1/products"
-        
+
         var queryItems = [URLQueryItem]()
-        
+
         if let offset = offset {
             queryItems.append(URLQueryItem(name: "offset", value: "\(offset)"))
         }
         if let limit = limit {
             queryItems.append(URLQueryItem(name: "limit", value: "\(limit)"))
         }
-        
+
         if let text = searchText, !text.trimmingCharacters(in: .whitespaces).isEmpty {
             queryItems.append(URLQueryItem(name: "title", value: text))
         }
-        
+
         if let filter = filter {
             if let price = filter.price {
                 queryItems.append(URLQueryItem(name: "price", value: "\(price)"))
@@ -58,11 +58,11 @@ final class NetworkService: NetworkServiceProtocol {
                 queryItems.append(URLQueryItem(name: "categoryId", value: "\(categoryId)"))
             }
         }
-        
+
         if !queryItems.isEmpty {
             components.queryItems = queryItems
         }
-        
+
         guard let url = components.url else {
             completion(.failure(NetworkError.invalidURL))
             return
@@ -85,13 +85,13 @@ final class NetworkService: NetworkServiceProtocol {
             }
         }.resume()
     }
-    
+
     func fetchCategories(completion: @escaping (Result<[Category], Error>) -> Void) {
         var components = URLComponents()
         components.scheme = "https"
         components.host = "api.escuelajs.co"
         components.path = "/api/v1/categories"
-        
+
         guard let url = components.url else {
             completion(.failure(NetworkError.invalidURL))
             return

@@ -19,7 +19,7 @@ final class FilterButton: UIButton {
         label.isHidden = true
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setImage(UIImage(systemName: "slider.horizontal.3"), for: .normal)
@@ -32,11 +32,11 @@ final class FilterButton: UIButton {
             badgeLabel.heightAnchor.constraint(equalToConstant: 20)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func updateBadge(count: Int) {
         badgeLabel.text = "\(count)"
         badgeLabel.isHidden = (count == 0)

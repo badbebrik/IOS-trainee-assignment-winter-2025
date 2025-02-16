@@ -8,9 +8,9 @@
 import UIKit
 
 final class CartRouter: CartRouterProtocol {
-    
+
     weak var viewController: UIViewController?
-    
+
     func navigateToProductDetail(with product: Product) {
         let detailVC = ProductDetailAssembly.assemble(with: product)
         if let nav = viewController?.navigationController {
@@ -19,10 +19,10 @@ final class CartRouter: CartRouterProtocol {
             viewController?.present(detailVC, animated: true, completion: nil)
         }
     }
-    
+
     func shareCart(with text: String) {
-        guard let vc = viewController else { return }
+        guard let viewController = viewController else { return }
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        vc.present(activityVC, animated: true)
+        viewController.present(activityVC, animated: true)
     }
 }
