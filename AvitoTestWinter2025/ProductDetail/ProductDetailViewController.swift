@@ -15,8 +15,8 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
     private let pageControl: UIPageControl = {
         let pc = UIPageControl()
         pc.currentPage = 0
-        pc.pageIndicatorTintColor = .darkGray
-        pc.currentPageIndicatorTintColor = .lightGray
+        pc.pageIndicatorTintColor = .secondarySystemBackground
+        pc.currentPageIndicatorTintColor = .darkGray
         pc.translatesAutoresizingMaskIntoConstraints = false
         return pc
     }()

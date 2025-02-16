@@ -55,6 +55,7 @@ final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollVie
     }
     
     func configure(with imageUrlString: String) {
+        imageView.tintColor = .secondarySystemBackground
         if let url = URL(string: imageUrlString) {
             imageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
         } else {

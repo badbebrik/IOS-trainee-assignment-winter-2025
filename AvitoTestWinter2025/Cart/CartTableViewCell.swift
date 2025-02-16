@@ -110,6 +110,7 @@ final class CartTableViewCell: UITableViewCell {
        priceLabel.text = "$\(item.product.price)"
        currentQuantity = item.quantity
        quantityLabel.text = "\(currentQuantity)"
+    productImageView.tintColor = .secondarySystemBackground
        if let urlString = item.product.images.first, let url = URL(string: urlString) {
            productImageView.kf.setImage(with: url, placeholder: UIImage(systemName: "photo"))
        } else {

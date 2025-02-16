@@ -35,6 +35,7 @@ final class GalleryCollectionViewCell: UICollectionViewCell {
 
     func configure(with imageUrlString: String) {
         let placeholderImage = UIImage(systemName: "photo")
+        imageView.tintColor = .secondarySystemBackground
         if let url = URL(string: imageUrlString) {
             imageView.kf.setImage(with: url, placeholder: placeholderImage)
         } else {

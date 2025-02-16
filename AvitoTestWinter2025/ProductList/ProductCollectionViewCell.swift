@@ -134,7 +134,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         productImageView.kf.cancelDownloadTask()
-        productImageView.image = UIImage(systemName: "placeholder-photo")
+        productImageView.image = UIImage(systemName: "photo")
+        productImageView.tintColor = .secondarySystemBackground
         titleLabel.text = nil
         priceLabel.text = nil
         addToCartButton.isHidden = false
@@ -143,6 +144,7 @@ final class ProductCollectionViewCell: UICollectionViewCell {
 
     func configure(with product: Product, cartQuantity: Int?) {
         self.currentProduct = product
+        productImageView.tintColor = .secondarySystemBackground
         titleLabel.text = product.title
         priceLabel.text = "$\(product.price)"
 
@@ -158,11 +160,11 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         if let urlString = product.images.first, let url = URL(string: urlString) {
             productImageView.kf.setImage(
                 with: url,
-                placeholder: UIImage(systemName: "placeholder-photo"),
+                placeholder: UIImage(systemName: "photo"),
                 options: [.transition(.fade(0.2))]
             )
         } else {
-            productImageView.image = UIImage(systemName: "placeholder-photo")
+            productImageView.image = UIImage(systemName: "photo")?.withTintColor(.secondarySystemBackground)
         }
     }
 

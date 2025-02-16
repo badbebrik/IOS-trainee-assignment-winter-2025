@@ -13,7 +13,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Введите название товара"
+        searchBar.placeholder = "Search product..."
         searchBar.searchTextField.clearButtonMode = .whileEditing
         return searchBar
     }()
