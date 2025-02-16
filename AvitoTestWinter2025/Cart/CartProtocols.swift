@@ -29,7 +29,7 @@ protocol CartInteractorProtocol: AnyObject {
     func clearCart()
     func moveItem(from sourceIndex: Int, to destinationIndex: Int)
     func updateQuantity(for cartItem: CartItem, quantity: Int)
-
+    
 }
 
 // MARK: Router

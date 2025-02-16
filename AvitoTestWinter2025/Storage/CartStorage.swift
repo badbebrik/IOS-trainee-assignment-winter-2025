@@ -14,19 +14,19 @@ protocol CartStorageProtocol {
 
 final class CartStorage: CartStorageProtocol {
     private let key = "CartItems"
-
+    
     func save(cartItems: [CartItem]) {
         if let data = try? JSONEncoder().encode(cartItems) {
             UserDefaults.standard.set(data, forKey: key)
         }
     }
-
+    
     func load() -> [CartItem] {
         guard let data = UserDefaults.standard.data(forKey: key), let items = try? JSONDecoder().decode([CartItem].self, from: data) else {
             return []
         }
-
+        
         return items
-
+        
     }
 }

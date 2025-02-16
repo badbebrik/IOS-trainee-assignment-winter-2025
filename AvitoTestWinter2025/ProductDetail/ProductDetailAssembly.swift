@@ -16,7 +16,7 @@ final class ProductDetailAssembly {
         let presenter = ProductDetailPresenter(product: product, router: router, interactor: interactor)
         viewController.presenter = presenter
         presenter.view = viewController
-
+        
         return viewController
     }
 }

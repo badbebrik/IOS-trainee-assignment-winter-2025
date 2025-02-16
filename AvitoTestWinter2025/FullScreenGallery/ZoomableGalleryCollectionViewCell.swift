@@ -10,7 +10,7 @@ import UIKit
 import Kingfisher
 
 final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollViewDelegate {
-    
+
     private let scrollView: UIScrollView = {
         let sv = UIScrollView()
         sv.minimumZoomScale = 1.0
@@ -20,7 +20,7 @@ final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollVie
         sv.translatesAutoresizingMaskIntoConstraints = false
         return sv
     }()
-    
+
     private let imageView: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
@@ -28,19 +28,19 @@ final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollVie
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(scrollView)
         scrollView.delegate = self
         scrollView.addSubview(imageView)
-        
+
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            
+
             imageView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
@@ -49,11 +49,11 @@ final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollVie
             imageView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(with imageUrlString: String) {
         imageView.tintColor = .secondarySystemBackground
         if let url = URL(string: imageUrlString) {
@@ -62,11 +62,11 @@ final class ZoomableGalleryCollectionViewCell: UICollectionViewCell, UIScrollVie
             imageView.image = UIImage(systemName: "photo")
         }
     }
-    
+
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         scrollView.setZoomScale(1.0, animated: false)
