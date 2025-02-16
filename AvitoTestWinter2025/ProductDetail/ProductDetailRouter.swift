@@ -17,9 +17,9 @@ final class ProductDetailRouter: ProductDetailRouterProtocol {
     }
 
     func shareProduct(with text: String) {
-        guard let vc = viewController else { return }
+        guard let viewController = viewController else { return }
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        vc.present(activityVC, animated: true)
+        viewController.present(activityVC, animated: true)
     }
 
     func navigateToCart() {

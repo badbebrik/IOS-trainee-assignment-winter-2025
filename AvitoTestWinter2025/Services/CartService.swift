@@ -50,7 +50,10 @@ final class CartService {
     }
 
     func moveItem(from sourceIndex: Int, to destinationIndex: Int) {
-        guard sourceIndex != destinationIndex, sourceIndex < cartItems.count, destinationIndex < cartItems.count else { return }
+        guard sourceIndex != destinationIndex,
+                sourceIndex < cartItems.count,
+                destinationIndex < cartItems.count
+        else { return }
         let item = cartItems.remove(at: sourceIndex)
         cartItems.insert(item, at: destinationIndex)
     }

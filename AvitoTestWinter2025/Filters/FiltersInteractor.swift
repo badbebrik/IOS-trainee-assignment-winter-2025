@@ -6,11 +6,14 @@
 //
 
 final class FiltersInteractor: FiltersInteractorProtocol {
+    private let networkService: NetworkServiceProtocol
+    var categories: [Category] = []
     private static var savedFilter: ProductFilter?
 
     private(set) var currentFilter: ProductFilter
 
-    init(initialFilter: ProductFilter?) {
+    init(initialFilter: ProductFilter?, networkService: NetworkServiceProtocol = NetworkService()) {
+        self.networkService = networkService
         if let filter = initialFilter {
             self.currentFilter = filter
             FiltersInteractor.savedFilter = filter
@@ -33,5 +36,17 @@ final class FiltersInteractor: FiltersInteractorProtocol {
     func resetFilter() {
         currentFilter = ProductFilter(title: nil, price: nil, priceMin: nil, priceMax: nil, categoryId: nil)
         FiltersInteractor.savedFilter = currentFilter
+    }
+
+    func loadCategories(completion: @escaping (Result<[Category], Error>) -> Void) {
+        networkService.fetchCategories { result in
+            switch result {
+            case .success(let categories):
+                self.categories = categories
+                completion(.success(categories))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
 }

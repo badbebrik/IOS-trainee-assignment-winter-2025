@@ -13,12 +13,12 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
 
     private var galleryCollectionView: UICollectionView!
     private let pageControl: UIPageControl = {
-        let pc = UIPageControl()
-        pc.currentPage = 0
-        pc.pageIndicatorTintColor = .secondarySystemBackground
-        pc.currentPageIndicatorTintColor = .darkGray
-        pc.translatesAutoresizingMaskIntoConstraints = false
-        return pc
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.pageIndicatorTintColor = .secondarySystemBackground
+        pageControl.currentPageIndicatorTintColor = .darkGray
+        pageControl.translatesAutoresizingMaskIntoConstraints = false
+        return pageControl
     }()
 
     private let titleLabel: UILabel = {
@@ -91,7 +91,11 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated(notification:)), name: .cartUpdated, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(cartUpdated(notification:)),
+            name: .cartUpdated, object: nil
+        )
         presenter.updateCartControlsForCurrentProduct()
     }
 
@@ -245,12 +249,21 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
 
 // MARK: - UICollectionViewDataSource & Delegate
 extension ProductDetailViewController: UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
         return product?.images.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as? GalleryCollectionViewCell else {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "GalleryCell",
+            for: indexPath
+        ) as? GalleryCollectionViewCell else {
             return UICollectionViewCell()
         }
         if let imageUrl = product?.images[indexPath.item] {

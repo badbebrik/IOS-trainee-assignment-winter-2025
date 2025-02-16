@@ -24,7 +24,10 @@ final class CartViewController: UIViewController {
         title = "Cart"
         configureUI()
         presenter.viewDidLoad()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear", style: .plain, target: self, action: #selector(clearCart))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Clear",
+                                                            style: .plain,
+                                                            target: self,
+                                                            action: #selector(clearCart))
     }
 
     private func configureUI() {
@@ -76,16 +79,22 @@ extension CartViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cartItems.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "CartCell", for: indexPath) as? CartTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "CartCell", for: indexPath)
+                as? CartTableViewCell else { return UITableViewCell() }
         let item = cartItems[indexPath.row]
         cell.configure(with: item)
         cell.delegate = self
         return cell
     }
 
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
         if editingStyle == .delete {
             let item = cartItems[indexPath.row]
             presenter.didRemoveCartItem(item)

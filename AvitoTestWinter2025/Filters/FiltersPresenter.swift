@@ -5,6 +5,8 @@
 //  Created by Виктория Серикова on 14.02.2025.
 //
 
+import Foundation
+
 final class FiltersPresenter: FiltersPresenterProtocol {
     weak var view: FiltersViewProtocol?
     var interactor: FiltersInteractorProtocol
@@ -16,6 +18,16 @@ final class FiltersPresenter: FiltersPresenterProtocol {
 
     func viewDidLoad() {
         view?.display(filter: interactor.getCurrentFilter())
+        interactor.loadCategories { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let categories):
+                    self?.view?.displayCategories(categories)
+                case .failure(let error):
+                    self?.view?.displayError(error)
+                }
+            }
+        }
     }
 
     func applyButtonTapped(with priceMin: String?, priceMax: String?, categoryId: String?) {
@@ -43,4 +55,3 @@ final class FiltersPresenter: FiltersPresenterProtocol {
         router?.dismissFilters(with: nil)
     }
 }
-

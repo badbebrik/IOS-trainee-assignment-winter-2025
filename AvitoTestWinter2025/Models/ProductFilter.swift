@@ -11,7 +11,7 @@ struct ProductFilter {
     var priceMin: Int?
     var priceMax: Int?
     var categoryId: Int?
-    
+
     var activeFiltersCount: Int {
         var count = 0
         if price != nil { count += 1 }

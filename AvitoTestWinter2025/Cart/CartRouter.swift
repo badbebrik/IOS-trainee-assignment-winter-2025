@@ -8,7 +8,7 @@
 import UIKit
 
 final class CartRouter: CartRouterProtocol {
-    
+
     weak var viewController: UIViewController?
 
     func navigateToProductDetail(with product: Product) {
@@ -21,8 +21,8 @@ final class CartRouter: CartRouterProtocol {
     }
 
     func shareCart(with text: String) {
-        guard let vc = viewController else { return }
+        guard let viewController = viewController else { return }
         let activityVC = UIActivityViewController(activityItems: [text], applicationActivities: nil)
-        vc.present(activityVC, animated: true)
+        viewController.present(activityVC, animated: true)
     }
 }

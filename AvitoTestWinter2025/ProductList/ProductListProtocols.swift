@@ -8,7 +8,7 @@
 // MARK: View protocol
 protocol ProductListViewProtocol: AnyObject {
     func showProducts(_ products: [Product])
-    func showEmptyState()
+    func showEmptyState(message: String, showRetry: Bool)
     func updateProductCell(for product: Product)
 }
 
@@ -20,7 +20,7 @@ protocol ProductListPresenterProtocol: AnyObject {
     func didFailToFetchProducts(with error: Error)
     func resetAndLoadProducts(searchText: String?, filter: ProductFilter?)
     func loadMoreProducts()
-    
+
     func didTapAddToCart(for product: Product)
     func didTapMinus(for product: Product)
     func didTapPlus(for product: Product)

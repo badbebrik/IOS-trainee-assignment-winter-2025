@@ -22,7 +22,9 @@ final class CartStorage: CartStorageProtocol {
     }
 
     func load() -> [CartItem] {
-        guard let data = UserDefaults.standard.data(forKey: key), let items = try? JSONDecoder().decode([CartItem].self, from: data) else {
+        guard let data = UserDefaults.standard.data(forKey: key),
+                let items = try? JSONDecoder().decode([CartItem].self, from: data)
+        else {
             return []
         }
 

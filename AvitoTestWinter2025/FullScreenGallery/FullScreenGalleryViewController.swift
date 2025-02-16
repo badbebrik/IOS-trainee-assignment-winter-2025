@@ -13,12 +13,12 @@ final class FullScreenGalleryViewController: UIViewController {
     private var initialIndex: Int = 0
 
     private var collectionView: UICollectionView!
-    private let closeButton: UIButton = {
-       let button = UIButton(type: .system)
-       button.setTitle("Close", for: .normal)
-       button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-       button.translatesAutoresizingMaskIntoConstraints = false
-       return button
+    private lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Close", for: .normal)
+        button.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     init(images: [String], initialIndex: Int) {
@@ -49,7 +49,9 @@ final class FullScreenGalleryViewController: UIViewController {
         layout.minimumLineSpacing = 0
 
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
-        collectionView.register(ZoomableGalleryCollectionViewCell.self, forCellWithReuseIdentifier: "ZoomableGalleryCell")
+        collectionView.register(
+            ZoomableGalleryCollectionViewCell.self, forCellWithReuseIdentifier: "ZoomableGalleryCell"
+        )
         collectionView.isPagingEnabled = true
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -79,8 +81,13 @@ extension FullScreenGalleryViewController: UICollectionViewDataSource, UICollect
         images.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ZoomableGalleryCell", for: indexPath) as? ZoomableGalleryCollectionViewCell else {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "ZoomableGalleryCell", for: indexPath
+        ) as? ZoomableGalleryCollectionViewCell else {
             return UICollectionViewCell()
         }
         cell.configure(with: images[indexPath.item])

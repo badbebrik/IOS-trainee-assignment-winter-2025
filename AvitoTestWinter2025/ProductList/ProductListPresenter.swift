@@ -69,11 +69,16 @@ extension ProductListPresenter: ProductListPresenterProtocol {
         }
         products.append(contentsOf: newProducts)
         currentOffset += newProducts.count
-        view?.showProducts(products)
+        if products.isEmpty {
+            view?.showEmptyState(message: "Nothing found", showRetry: false)
+        } else {
+            view?.showProducts(products)
+        }
     }
 
     func didFailToFetchProducts(with error: any Error) {
         isLoading = false
+        view?.showEmptyState(message: "Error occured while fetching the data. Please retry", showRetry: true)
     }
 
     func didTapAddToCart(for product: Product) {

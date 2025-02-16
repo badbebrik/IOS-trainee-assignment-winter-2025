@@ -5,8 +5,6 @@
 //  Created by Виктория Серикова on 14.02.2025.
 //
 
-
-
 final class ProductDetailPresenter: ProductDetailPresenterProtocol {
 
     weak var view: ProductDetailViewProtocol?

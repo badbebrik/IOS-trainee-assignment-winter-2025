@@ -80,7 +80,8 @@ final class ProductCollectionViewCell: UICollectionViewCell {
         quantityContainerView.addSubview(quantityLabel)
         quantityContainerView.addSubview(plusButton)
 
-        [productImageView, titleLabel, priceLabel, addToCartButton, quantityContainerView, minusButton, quantityLabel, plusButton].forEach {
+        [productImageView, titleLabel, priceLabel,
+         addToCartButton, quantityContainerView, minusButton, quantityLabel, plusButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
 
