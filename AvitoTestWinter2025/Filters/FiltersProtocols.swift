@@ -10,6 +10,8 @@ import UIKit
 // MARK: - View Protocol
 protocol FiltersViewProtocol: AnyObject {
     func display(filter: ProductFilter)
+    func displayCategories(_ categories: [Category])
+    func displayError(_ error: Error)
 }
 
 // MARK: - Presenter Protocol
@@ -26,6 +28,7 @@ protocol FiltersInteractorProtocol: AnyObject {
     func getCurrentFilter() -> ProductFilter
     func updateFilter(_ filter: ProductFilter)
     func resetFilter()
+    func loadCategories(completion: @escaping (Result<[Category], Error>) -> Void)
 }
 
 // MARK: - Router Protocol
