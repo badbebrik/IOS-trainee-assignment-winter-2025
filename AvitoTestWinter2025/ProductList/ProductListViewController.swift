@@ -24,6 +24,14 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         return button
     }()
 
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .systemBlue
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated(notification:)), name: .cartUpdated, object: nil)
@@ -85,6 +93,12 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         configureUI()
         configureNavigationBar()
         configureSearchHistoryTableView()
+        view.addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        loadingIndicator.startAnimating()
         searchBar.delegate = self
         collectionView.register(ProductCollectionViewCell.self, forCellWithReuseIdentifier: "ProductCell")
         collectionView.dataSource = self
@@ -158,11 +172,13 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         }
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.loadingIndicator.stopAnimating()
         }
     }
 
     func showEmptyState(message: String, showRetry: Bool) {
         DispatchQueue.main.async { [self] in
+            loadingIndicator.stopAnimating()
             emptyStateView.isHidden = false
             collectionView.isHidden = true
             if let messageLabel = emptyStateView.viewWithTag(100) as? UILabel {
@@ -216,6 +232,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     }
 
     @objc private func retryButtonTapped() {
+        loadingIndicator.startAnimating()
         presenter?.resetAndLoadProducts(searchText: nil, filter: currentFilter)
     }
 
