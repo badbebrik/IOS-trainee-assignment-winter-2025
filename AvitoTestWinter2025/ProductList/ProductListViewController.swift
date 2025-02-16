@@ -45,6 +45,35 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         return button
     }()
 
+    private lazy var emptyStateView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBackground
+        view.isHidden = true
+
+        let messageLabel = UILabel()
+        messageLabel.tag = 100
+        messageLabel.textAlignment = .center
+        messageLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        let retryButton = UIButton(type: .system)
+        retryButton.tag = 101
+        retryButton.setTitle("Retry", for: .normal)
+        retryButton.addTarget(self, action: #selector(retryButtonTapped), for: .touchUpInside)
+        retryButton.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(messageLabel)
+        view.addSubview(retryButton)
+
+        NSLayoutConstraint.activate([
+            messageLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            retryButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 16),
+            retryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        return view
+    }()
+
     private var products: [Product] = []
     private var collectionView: UICollectionView!
     private var historyTableView: UITableView!
@@ -85,12 +114,20 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
 
         view.addSubview(collectionView)
+        view.addSubview(emptyStateView)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: padding),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: padding),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -padding),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -padding)
+        ])
+
+        NSLayoutConstraint.activate([
+            emptyStateView.topAnchor.constraint(equalTo: view.topAnchor),
+            emptyStateView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            emptyStateView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            emptyStateView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
@@ -114,8 +151,33 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     func showProducts(_ products: [Product]) {
         self.products = products
+        if products.isEmpty {
+            showEmptyState(message: "Nothing found", showRetry: false)
+        } else {
+            hideEmptyState()
+        }
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+        }
+    }
+
+    func showEmptyState(message: String, showRetry: Bool) {
+        DispatchQueue.main.async { [self] in
+            emptyStateView.isHidden = false
+            collectionView.isHidden = true
+            if let messageLabel = emptyStateView.viewWithTag(100) as? UILabel {
+                messageLabel.text = message
+            }
+            if let retryButton = emptyStateView.viewWithTag(101) as? UIButton {
+                retryButton.isHidden = !showRetry
+            }
+        }
+    }
+
+    private func hideEmptyState() {
+        DispatchQueue.main.async { [self] in
+            emptyStateView.isHidden = true
+            collectionView.isHidden = false
         }
     }
 
@@ -129,10 +191,6 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     private func hideSearchHistory() {
         historyTableView.isHidden = true
         collectionView.isHidden = false
-    }
-
-    func showEmptyState() {
-
     }
 
     func updateProductCell(for product: Product) {
@@ -155,6 +213,10 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     @objc private func cartUpdated(notification: Notification) {
         collectionView.reloadData()
+    }
+
+    @objc private func retryButtonTapped() {
+        presenter?.resetAndLoadProducts(searchText: nil, filter: currentFilter)
     }
 
     func updateFilterBadge(count: Int) {

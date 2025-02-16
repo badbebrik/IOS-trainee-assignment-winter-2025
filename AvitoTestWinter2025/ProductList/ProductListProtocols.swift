@@ -8,7 +8,7 @@
 // MARK: View protocol
 protocol ProductListViewProtocol: AnyObject {
     func showProducts(_ products: [Product])
-    func showEmptyState()
+    func showEmptyState(message: String, showRetry: Bool)
     func updateProductCell(for product: Product)
 }
 
