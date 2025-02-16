@@ -22,4 +22,13 @@ final class ProductDetailRouter: ProductDetailRouterProtocol {
         vc.present(activityVC, animated: true)
     }
 
+    func navigateToCart() {
+        let cartVC = CartAssembly.assemble()
+        if let nav = viewController?.navigationController {
+            nav.pushViewController(cartVC, animated: true)
+        } else {
+            viewController?.present(cartVC, animated: true, completion: nil)
+        }
+    }
+
 }

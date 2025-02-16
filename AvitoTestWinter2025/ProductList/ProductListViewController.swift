@@ -8,6 +8,7 @@
 import UIKit
 
 final class ProductListViewController: UIViewController, ProductListViewProtocol {
+
     var presenter: ProductListPresenterProtocol?
 
     private let searchBar: UISearchBar = {
@@ -64,7 +65,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         let layout = UICollectionViewFlowLayout()
         let padding: CGFloat = 10
         let itemWidth = (view.frame.width - 3 * padding) / 2.0
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth + 50)
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth + 100)
         layout.minimumInteritemSpacing = padding
         layout.minimumLineSpacing = padding
 
@@ -121,6 +122,10 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     func showEmptyState() {
 
+    }
+    
+    func updateProductCell(for product: Product) {
+        collectionView.reloadData()
     }
 
     @objc private func filterButtonTapped() {
@@ -203,7 +208,9 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         let product = products[indexPath.row]
-        cell.configure(with: product)
+        let quantity = CartService.shared.cartItems.first(where: { $0.product.id == product.id })?.quantity ?? 0
+        cell.configure(with: product, cartQuantity: quantity)
+        cell.delegate = self
         return cell
     }
 
