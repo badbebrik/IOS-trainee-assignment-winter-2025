@@ -47,6 +47,7 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
     private let cartControlsContainer: UIView = {
         let view = UIView()
         view.backgroundColor = .secondarySystemBackground
+        view.layer.cornerRadius = 12
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -86,6 +87,21 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
         configureUI()
         configureCartControls()
         presenter.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated(notification:)), name: .cartUpdated, object: nil)
+        presenter.updateCartControlsForCurrentProduct()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .cartUpdated, object: nil)
+    }
+
+    @objc private func cartUpdated(notification: Notification) {
+        presenter.updateCartControlsForCurrentProduct()
     }
 
     private func configureNavigationBar() {
@@ -147,13 +163,13 @@ final class ProductDetailViewController: UIViewController, ProductDetailViewProt
         cartControlsContainer.addSubview(detailPlusButton)
 
         NSLayoutConstraint.activate([
-            cartControlsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cartControlsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            cartControlsContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            cartControlsContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             cartControlsContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             cartControlsContainer.heightAnchor.constraint(equalToConstant: 60),
 
-            cartActionButton.leadingAnchor.constraint(equalTo: cartControlsContainer.leadingAnchor, constant: 16),
-            cartActionButton.trailingAnchor.constraint(equalTo: cartControlsContainer.trailingAnchor, constant: -16),
+            cartActionButton.leadingAnchor.constraint(equalTo: cartControlsContainer.leadingAnchor),
+            cartActionButton.trailingAnchor.constraint(equalTo: cartControlsContainer.trailingAnchor),
             cartActionButton.topAnchor.constraint(equalTo: cartControlsContainer.topAnchor, constant: 8),
             cartActionButton.heightAnchor.constraint(equalToConstant: 44),
 

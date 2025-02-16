@@ -24,6 +24,17 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         return button
     }()
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated(notification:)), name: .cartUpdated, object: nil)
+        collectionView.reloadData()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .cartUpdated, object: nil)
+    }
+
     private lazy var cartButton: UIBarButtonItem = {
         let button = UIBarButtonItem(
             image: UIImage(systemName: "cart"),
@@ -123,7 +134,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     func showEmptyState() {
 
     }
-    
+
     func updateProductCell(for product: Product) {
         collectionView.reloadData()
     }
@@ -132,7 +143,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         let filtersVC = FiltersAssembly.assemble(currentFilter: self.currentFilter, delegate: self)
         present(filtersVC, animated: true, completion: nil)
     }
-    
+
     @objc private func cartButtonTapped() {
         let cartVC = CartAssembly.assemble()
         if let nav = navigationController {
@@ -140,6 +151,10 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         } else {
             present(cartVC, animated: true, completion: nil)
         }
+    }
+
+    @objc private func cartUpdated(notification: Notification) {
+        collectionView.reloadData()
     }
 
     func updateFilterBadge(count: Int) {
