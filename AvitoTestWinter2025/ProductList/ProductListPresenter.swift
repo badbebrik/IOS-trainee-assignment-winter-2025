@@ -75,4 +75,25 @@ extension ProductListPresenter: ProductListPresenterProtocol {
     func didFailToFetchProducts(with error: any Error) {
         isLoading = false
     }
+
+    func didTapAddToCart(for product: Product) {
+        CartService.shared.addProduct(product, quantity: 1)
+        view?.updateProductCell(for: product)
+    }
+
+    func didTapMinus(for product: Product) {
+        let currentQuantity = CartService.shared.cartItems.first(where: { $0.product.id == product.id })?.quantity ?? 0
+        if currentQuantity > 1 {
+            CartService.shared.updateQuantity(for: product, quantity: currentQuantity - 1)
+        } else {
+            CartService.shared.removeProduct(product)
+        }
+        view?.updateProductCell(for: product)
+    }
+
+    func didTapPlus(for product: Product) {
+        let currentQuantity = CartService.shared.cartItems.first(where: { $0.product.id == product.id })?.quantity ?? 0
+        CartService.shared.updateQuantity(for: product, quantity: currentQuantity + 1)
+        view?.updateProductCell(for: product)
+    }
 }

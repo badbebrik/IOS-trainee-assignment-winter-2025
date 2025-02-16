@@ -8,11 +8,12 @@
 import UIKit
 
 final class ProductListViewController: UIViewController, ProductListViewProtocol {
+
     var presenter: ProductListPresenterProtocol?
 
     private let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Введите название товара"
+        searchBar.placeholder = "Search product..."
         searchBar.searchTextField.clearButtonMode = .whileEditing
         return searchBar
     }()
@@ -20,6 +21,27 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     private lazy var filterButton: FilterButton = {
         let button = FilterButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
         button.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        return button
+    }()
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        NotificationCenter.default.addObserver(self, selector: #selector(cartUpdated(notification:)), name: .cartUpdated, object: nil)
+        collectionView.reloadData()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: .cartUpdated, object: nil)
+    }
+
+    private lazy var cartButton: UIBarButtonItem = {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "cart"),
+            style: .plain,
+            target: self,
+            action: #selector(cartButtonTapped)
+        )
         return button
     }()
 
@@ -44,6 +66,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
     private func configureNavigationBar() {
         navigationItem.titleView = searchBar
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: filterButton)
+        navigationItem.leftBarButtonItem = cartButton
     }
 
     func configureUI() {
@@ -53,7 +76,7 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
         let layout = UICollectionViewFlowLayout()
         let padding: CGFloat = 10
         let itemWidth = (view.frame.width - 3 * padding) / 2.0
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth + 50)
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth + 100)
         layout.minimumInteritemSpacing = padding
         layout.minimumLineSpacing = padding
 
@@ -112,9 +135,26 @@ final class ProductListViewController: UIViewController, ProductListViewProtocol
 
     }
 
+    func updateProductCell(for product: Product) {
+        collectionView.reloadData()
+    }
+
     @objc private func filterButtonTapped() {
         let filtersVC = FiltersAssembly.assemble(currentFilter: self.currentFilter, delegate: self)
         present(filtersVC, animated: true, completion: nil)
+    }
+
+    @objc private func cartButtonTapped() {
+        let cartVC = CartAssembly.assemble()
+        if let nav = navigationController {
+            nav.pushViewController(cartVC, animated: true)
+        } else {
+            present(cartVC, animated: true, completion: nil)
+        }
+    }
+
+    @objc private func cartUpdated(notification: Notification) {
+        collectionView.reloadData()
     }
 
     func updateFilterBadge(count: Int) {
@@ -183,7 +223,9 @@ extension ProductListViewController: UICollectionViewDataSource, UICollectionVie
             return UICollectionViewCell()
         }
         let product = products[indexPath.row]
-        cell.configure(with: product)
+        let quantity = CartService.shared.cartItems.first(where: { $0.product.id == product.id })?.quantity ?? 0
+        cell.configure(with: product, cartQuantity: quantity)
+        cell.delegate = self
         return cell
     }
 
